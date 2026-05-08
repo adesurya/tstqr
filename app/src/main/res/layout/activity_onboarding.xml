@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Top: Step indicator (NO MORE SKIP BUTTON) -->
+        <TextView
+            android:id="@+id/textStepIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Langkah 1 dari 5"
+            android:textSize="13sp"
+            android:textColor="#888888"
+            android:layout_marginBottom="16dp"
+            android:gravity="center" />
+
+        <!-- Progress dots -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="32dp">
+
+            <View
+                android:id="@+id/dot1"
+                android:layout_width="40dp"
+                android:layout_height="6dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/dot_active" />
+
+            <View
+                android:id="@+id/dot2"
+                android:layout_width="40dp"
+                android:layout_height="6dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/dot_inactive" />
+
+            <View
+                android:id="@+id/dot3"
+                android:layout_width="40dp"
+                android:layout_height="6dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/dot_inactive" />
+
+            <View
+                android:id="@+id/dot4"
+                android:layout_width="40dp"
+                android:layout_height="6dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/dot_inactive" />
+
+            <View
+                android:id="@+id/dot5"
+                android:layout_width="40dp"
+                android:layout_height="6dp"
+                android:background="@drawable/dot_inactive" />
+        </LinearLayout>
+
+        <!-- KONTEN YANG DI-ANIMATE -->
+        <LinearLayout
+            android:id="@+id/contentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Big icon -->
+            <ImageView
+                android:id="@+id/iconBig"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="24dp"
+                android:src="@drawable/ic_step_welcome"
+                android:contentDescription="Step icon" />
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/textTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Selamat Datang!"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#1F1F1F"
+                android:gravity="center"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Description -->
+            <TextView
+                android:id="@+id/textDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                android:textSize="15sp"
+                android:textColor="#555555"
+                android:gravity="center"
+                android:lineSpacingExtra="4dp"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Details (bullet points) -->
+            <TextView
+                android:id="@+id/textDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Details"
+                android:textSize="14sp"
+                android:textColor="#333333"
+                android:lineSpacingExtra="6dp"
+                android:padding="16dp"
+                android:background="#F5F5F5"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Configuration fields (only step 3) -->
+            <LinearLayout
+                android:id="@+id/configFieldsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp">
+
+                <EditText
+                    android:id="@+id/editServerUrl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Server URL (https://...)"
+                    android:inputType="textUri"
+                    android:layout_marginBottom="12dp"
+                    android:autofillHints="" />
+
+                <EditText
+                    android:id="@+id/editDeviceSecret"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Device Secret"
+                    android:inputType="textPassword"
+                    android:fontFamily="monospace"
+                    android:autofillHints="" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Spacer -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:minHeight="20dp" />
+
+        <!-- Buttons (di luar contentContainer agar tidak ikut animate) -->
+        <Button
+            android:id="@+id/btnPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mulai Setup"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#FF6B35"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnSecondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Kembali"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:background="?android:attr/selectableItemBackground" />
+
+    </LinearLayout>
+</ScrollView>

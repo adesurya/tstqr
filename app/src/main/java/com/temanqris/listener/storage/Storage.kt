@@ -7,9 +7,6 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.util.UUID
 
-/**
- * Manager untuk SharedPreferences (config, device credentials).
- */
 class PreferencesManager(context: Context) {
 
     private val prefs: SharedPreferences = context.getSharedPreferences(
@@ -22,12 +19,17 @@ class PreferencesManager(context: Context) {
         private const val KEY_DEVICE_ID = "device_id"
         private const val KEY_DEVICE_SECRET = "device_secret"
         private const val KEY_LISTENER_ENABLED = "listener_enabled"
+        private const val KEY_ONBOARDING_COMPLETE = "onboarding_complete"
+        private const val KEY_PAUSED_UNTIL = "paused_until"
+        private const val KEY_TOTAL_NOTIFICATIONS_PROCESSED = "total_notifications_processed"
+        private const val KEY_TOTAL_PAYMENTS_DETECTED = "total_payments_detected"
+        private const val KEY_TOTAL_PAYMENTS_MATCHED = "total_payments_matched"
+        private const val KEY_LAST_HEARTBEAT = "last_heartbeat"
     }
 
     fun getServerUrl(): String? = prefs.getString(KEY_SERVER_URL, null)
     fun setServerUrl(url: String) = prefs.edit().putString(KEY_SERVER_URL, url).apply()
 
-    /** Auto-generate device ID kalau belum ada. */
     fun getDeviceId(): String {
         var id = prefs.getString(KEY_DEVICE_ID, null)
         if (id == null) {
@@ -42,12 +44,40 @@ class PreferencesManager(context: Context) {
 
     fun isListenerEnabled(): Boolean = prefs.getBoolean(KEY_LISTENER_ENABLED, false)
     fun setListenerEnabled(enabled: Boolean) = prefs.edit().putBoolean(KEY_LISTENER_ENABLED, enabled).apply()
+
+    fun isOnboardingComplete(): Boolean = prefs.getBoolean(KEY_ONBOARDING_COMPLETE, false)
+    fun setOnboardingComplete(complete: Boolean) =
+        prefs.edit().putBoolean(KEY_ONBOARDING_COMPLETE, complete).apply()
+
+    /** Pause listener untuk waktu tertentu (epoch millis). 0 = tidak paused. */
+    fun getPausedUntil(): Long = prefs.getLong(KEY_PAUSED_UNTIL, 0)
+    fun setPausedUntil(timestamp: Long) = prefs.edit().putLong(KEY_PAUSED_UNTIL, timestamp).apply()
+    fun isPaused(): Boolean = getPausedUntil() > System.currentTimeMillis()
+    fun resumeNow() = setPausedUntil(0)
+
+    /** Stats untuk privacy dashboard */
+    fun incrementTotalProcessed() {
+        prefs.edit().putInt(KEY_TOTAL_NOTIFICATIONS_PROCESSED,
+            prefs.getInt(KEY_TOTAL_NOTIFICATIONS_PROCESSED, 0) + 1).apply()
+    }
+    fun incrementPaymentsDetected() {
+        prefs.edit().putInt(KEY_TOTAL_PAYMENTS_DETECTED,
+            prefs.getInt(KEY_TOTAL_PAYMENTS_DETECTED, 0) + 1).apply()
+    }
+    fun incrementPaymentsMatched() {
+        prefs.edit().putInt(KEY_TOTAL_PAYMENTS_MATCHED,
+            prefs.getInt(KEY_TOTAL_PAYMENTS_MATCHED, 0) + 1).apply()
+    }
+    fun getStats(): Triple<Int, Int, Int> = Triple(
+        prefs.getInt(KEY_TOTAL_NOTIFICATIONS_PROCESSED, 0),
+        prefs.getInt(KEY_TOTAL_PAYMENTS_DETECTED, 0),
+        prefs.getInt(KEY_TOTAL_PAYMENTS_MATCHED, 0)
+    )
+
+    fun updateHeartbeat() = prefs.edit().putLong(KEY_LAST_HEARTBEAT, System.currentTimeMillis()).apply()
+    fun getLastHeartbeat(): Long = prefs.getLong(KEY_LAST_HEARTBEAT, 0)
 }
 
-/**
- * Simple log store pakai SharedPreferences (untuk POC).
- * Di production: pakai Room database.
- */
 class NotificationLogStore(context: Context) {
 
     private val prefs: SharedPreferences = context.getSharedPreferences(
@@ -60,10 +90,6 @@ class NotificationLogStore(context: Context) {
         private const val MAX_LOGS = 100
     }
 
-    /**
-     * Log notifikasi yang berhasil di-parse sebagai payment.
-     * Return: log entry ID
-     */
     fun logPayment(payment: PaymentNotification, notificationKey: String): String {
         val id = UUID.randomUUID().toString()
         val entry = JSONObject().apply {
@@ -83,9 +109,6 @@ class NotificationLogStore(context: Context) {
         return id
     }
 
-    /**
-     * Log notifikasi yang di-skip (untuk debugging false negatives).
-     */
     fun logSkipped(packageName: String, rawText: String, postedAt: Long) {
         val entry = JSONObject().apply {
             put("id", UUID.randomUUID().toString())
@@ -120,10 +143,13 @@ class NotificationLogStore(context: Context) {
         return (0 until minOf(logs.length(), limit)).map { logs.getJSONObject(it) }
     }
 
+    fun clearLogs() {
+        prefs.edit().remove(KEY_LOGS).apply()
+    }
+
     private fun appendLog(entry: JSONObject) {
         synchronized(this) {
             val logs = readLogs()
-            // Prepend (newest first)
             val newLogs = JSONArray()
             newLogs.put(entry)
             for (i in 0 until minOf(logs.length(), MAX_LOGS - 1)) {

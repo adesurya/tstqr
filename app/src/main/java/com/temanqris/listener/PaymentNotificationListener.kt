@@ -7,25 +7,17 @@ import android.util.Log
 import com.temanqris.listener.network.WebhookClient
 import com.temanqris.listener.parser.PaymentNotificationParser
 import com.temanqris.listener.storage.NotificationLogStore
+import com.temanqris.listener.storage.PreferencesManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
-/**
- * Service inti yang menangkap setiap notifikasi yang muncul di status bar.
- *
- * IMPORTANT:
- *  - User HARUS grant permission "Notification Access" di Settings secara manual
- *  - Service ini bisa di-kill OS, makanya kita pair dengan ListenerKeepAliveService
- *  - Hanya proses notifikasi dari package e-wallet yang kita whitelist
- */
 class PaymentNotificationListener : NotificationListenerService() {
 
     companion object {
         private const val TAG = "PaymentListener"
 
-        // Whitelist: hanya package ini yang akan kita proses
         private val WATCHED_PACKAGES = setOf(
             "com.gojek.app",
             "com.gojek.gopay",
@@ -37,21 +29,21 @@ class PaymentNotificationListener : NotificationListenerService() {
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private lateinit var webhookClient: WebhookClient
     private lateinit var logStore: NotificationLogStore
+    private lateinit var prefs: PreferencesManager
 
-    // Deduplication: simpan key notifikasi yang sudah diproses
-    // (kadang OS deliver notifikasi yang sama 2x)
     private val recentlyProcessed = mutableSetOf<String>()
-    private val DEDUP_WINDOW_MS = 30_000L
 
     override fun onCreate() {
         super.onCreate()
         webhookClient = WebhookClient(applicationContext)
         logStore = NotificationLogStore(applicationContext)
+        prefs = PreferencesManager(applicationContext)
         Log.d(TAG, "Service created")
     }
 
     override fun onListenerConnected() {
         super.onListenerConnected()
+        prefs.updateHeartbeat()
         Log.d(TAG, "Listener connected to notification system")
     }
 
@@ -61,16 +53,28 @@ class PaymentNotificationListener : NotificationListenerService() {
         // Filter awal: hanya package yang di-watch
         if (sbn.packageName !in WATCHED_PACKAGES) return
 
-        // Deduplication berdasarkan key + timestamp window
+        // Cek state - listener mungkin di-pause atau di-disable
+        if (!prefs.isListenerEnabled()) {
+            Log.d(TAG, "Listener disabled, skipping")
+            return
+        }
+        if (prefs.isPaused()) {
+            Log.d(TAG, "Listener paused, skipping")
+            return
+        }
+
+        // Update heartbeat
+        prefs.updateHeartbeat()
+        prefs.incrementTotalProcessed()
+
+        // Deduplication
         val dedupKey = "${sbn.key}_${sbn.postTime / 1000}"
         if (recentlyProcessed.contains(dedupKey)) {
-            Log.d(TAG, "Duplicate notification ignored: $dedupKey")
             return
         }
         recentlyProcessed.add(dedupKey)
         cleanupDedupCache()
 
-        // Extract content dari notification
         val extras = sbn.notification.extras
         val title = extras.getCharSequence(Notification.EXTRA_TITLE)?.toString()
         val text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString()
@@ -79,7 +83,6 @@ class PaymentNotificationListener : NotificationListenerService() {
 
         Log.d(TAG, "Received from ${sbn.packageName}: $title - $text")
 
-        // Process di background coroutine
         scope.launch {
             processNotification(
                 packageName = sbn.packageName,
@@ -102,39 +105,36 @@ class PaymentNotificationListener : NotificationListenerService() {
         postedAt: Long,
         notificationKey: String
     ) {
-        // 1. Parse notifikasi
         val payment = PaymentNotificationParser.parse(
             packageName, title, text, bigText, subText, postedAt
         )
 
         if (payment == null) {
-            Log.d(TAG, "Notification not a valid payment: $title - $text")
-            // Tetap log untuk debugging
             logStore.logSkipped(packageName, "$title | $text", postedAt)
             return
         }
 
-        Log.i(TAG, "✓ Payment detected: ${payment.source} Rp${payment.amount} from ${payment.payerName} (confidence: ${payment.confidence})")
+        Log.i(TAG, "Payment detected: ${payment.source} Rp${payment.amount}")
+        prefs.incrementPaymentsDetected()
 
-        // 2. Simpan ke local log untuk audit & UI
         val logId = logStore.logPayment(payment, notificationKey)
 
-        // 3. Kirim ke server
         try {
             val response = webhookClient.sendPaymentNotification(payment)
             logStore.markUploaded(logId, response.matched, response.orderId)
 
-            Log.i(TAG, "✓ Sent to server. Matched=${response.matched}, OrderID=${response.orderId}")
+            if (response.matched) {
+                prefs.incrementPaymentsMatched()
+            }
+
+            Log.i(TAG, "Sent to server. Matched=${response.matched}")
         } catch (e: Exception) {
             Log.e(TAG, "Failed to send to server", e)
             logStore.markFailed(logId, e.message ?: "Unknown error")
-            // Akan di-retry oleh WorkManager (tidak diimplementasi di POC ini
-            // tapi struktur sudah siap)
         }
     }
 
     private fun cleanupDedupCache() {
-        // Simple cleanup: kalau cache > 100 entries, drop half
         if (recentlyProcessed.size > 100) {
             val toRemove = recentlyProcessed.take(50)
             recentlyProcessed.removeAll(toRemove.toSet())
@@ -142,6 +142,6 @@ class PaymentNotificationListener : NotificationListenerService() {
     }
 
     override fun onNotificationRemoved(sbn: StatusBarNotification?) {
-        // Tidak perlu handle removal untuk POC ini
+        // Not needed
     }
 }

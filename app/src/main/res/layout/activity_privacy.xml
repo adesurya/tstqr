@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F9F9F9">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Privacy &amp; Transparansi"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#1F1F1F"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lihat persis apa yang app ini lakukan dengan notifikasi Anda"
+            android:textSize="13sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Stats -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Statistik Penggunaan"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/textTotalProcessed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="#FF6B35" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Notifikasi\ndiproses"
+                        android:textSize="11sp"
+                        android:textColor="#666666"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/textPaymentsDetected"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="#534AB7" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pembayaran\nterdeteksi"
+                        android:textSize="11sp"
+                        android:textColor="#666666"
+                        android:gravity="center" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/textPaymentsMatched"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="#22C55E" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Order\nter-match"
+                        android:textSize="11sp"
+                        android:textColor="#666666"
+                        android:gravity="center" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- What we read -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="✓ Apa yang Dibaca"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#15803D"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/textWhatWeRead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:lineSpacingExtra="3dp"
+                android:textColor="#333333" />
+        </LinearLayout>
+
+        <!-- What we send -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="↗ Data yang Dikirim ke Server"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#534AB7"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/textWhatWeSend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:lineSpacingExtra="3dp"
+                android:textColor="#333333" />
+        </LinearLayout>
+
+        <!-- What we don't send -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="✗ Yang TIDAK Pernah Dikirim"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#DC2626"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/textWhatWeDontSend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:lineSpacingExtra="3dp"
+                android:textColor="#333333" />
+        </LinearLayout>
+
+        <!-- Action buttons -->
+        <Button
+            android:id="@+id/btnViewLogs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lihat Log Notifikasi"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnClearLogs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Hapus Semua Log"
+            android:textColor="#DC2626"
+            android:backgroundTint="#FFFFFF"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Kembali"
+            android:textColor="#666666"
+            android:background="?android:attr/selectableItemBackground" />
+
+    </LinearLayout>
+</ScrollView>

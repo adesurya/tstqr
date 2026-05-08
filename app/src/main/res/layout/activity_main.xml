@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="#F9F9F9">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,189 +10,226 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Header -->
-        <TextView
+        <!-- App header -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TemanQRIS Listener"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="#FF6B35" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Auto-reconciliation untuk QRIS statis"
-            android:textSize="14sp"
-            android:textColor="#666666"
-            android:layout_marginBottom="20dp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TemanQRIS"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#FF6B35" />
 
-        <!-- Status Card -->
-        <androidx.cardview.widget.CardView
+            <Button
+                android:id="@+id/btnPause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pause"
+                android:textSize="12sp"
+                android:textColor="#666666"
+                android:background="?android:attr/selectableItemBackground"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- Big Status Card -->
+        <LinearLayout
+            android:id="@+id/statusCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:background="#F5F5F5"
+            android:layout_marginBottom="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
 
                 <TextView
+                    android:id="@+id/statusIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="○"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="12dp" />
+
+                <TextView
+                    android:id="@+id/statusTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Status"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="8dp" />
-
-                <TextView
-                    android:id="@+id/textPermissionStatus"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Checking..."
-                    android:textSize="14sp"
-                    android:layout_marginBottom="4dp" />
-
-                <TextView
-                    android:id="@+id/textListenerStatus"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Checking..."
-                    android:textSize="14sp"
-                    android:layout_marginBottom="4dp" />
-
-                <TextView
-                    android:id="@+id/textDeviceId"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Device ID:"
-                    android:textSize="12sp"
-                    android:textColor="#888888"
-                    android:fontFamily="monospace" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
 
-        <!-- Configuration Card -->
-        <androidx.cardview.widget.CardView
+            <TextView
+                android:id="@+id/statusDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                android:textSize="13sp"
+                android:layout_marginBottom="16dp" />
+
+            <Button
+                android:id="@+id/btnQuickAction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Action"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#FF6B35" />
+        </LinearLayout>
+
+        <!-- Stats row -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:layout_marginEnd="4dp">
+
+                <TextView
+                    android:id="@+id/statTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="#FF6B35" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Diproses"
+                    android:textSize="11sp"
+                    android:textColor="#666666" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp">
+
+                <TextView
+                    android:id="@+id/statDetected"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="#534AB7" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pembayaran"
+                    android:textSize="11sp"
+                    android:textColor="#666666" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:layout_marginStart="4dp">
+
+                <TextView
+                    android:id="@+id/statMatched"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="#22C55E" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Match Order"
+                    android:textSize="11sp"
+                    android:textColor="#666666" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Recent Activity -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="#FFFFFF"
+            android:layout_marginBottom="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Konfigurasi Server"
+                    android:layout_weight="1"
+                    android:text="Aktivitas Terkini"
                     android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="12dp" />
-
-                <EditText
-                    android:id="@+id/editServerUrl"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Server URL (e.g. https://api.temanqris.com)"
-                    android:inputType="textUri"
-                    android:layout_marginBottom="8dp" />
-
-                <EditText
-                    android:id="@+id/editDeviceSecret"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Device Secret (dari dashboard)"
-                    android:inputType="textPassword"
-                    android:fontFamily="monospace"
-                    android:layout_marginBottom="12dp" />
+                    android:textStyle="bold" />
 
                 <Button
-                    android:id="@+id/btnSaveConfig"
-                    android:layout_width="match_parent"
+                    android:id="@+id/btnLogs"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Simpan Konfigurasi"
-                    android:backgroundTint="#FF6B35"
-                    android:textColor="#FFFFFF" />
+                    android:text="Refresh"
+                    android:textSize="12sp" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
 
-        <!-- Action Buttons -->
-        <Button
-            android:id="@+id/btnGrantPermission"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Grant Notification Permission"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/btnToggleListener"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Aktifkan Listener"
-            android:backgroundTint="#22C55E"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="20dp" />
-
-        <!-- Logs Card -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/textRecentActivity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:text="Belum ada aktivitas."
+                android:textSize="12sp"
+                android:fontFamily="monospace"
+                android:textColor="#444444"
+                android:lineSpacingExtra="4dp" />
+        </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Log Notifikasi (20 terakhir)"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <Button
-                        android:id="@+id/btnRefreshLogs"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Refresh"
-                        android:textSize="12sp"
-                        android:minHeight="0dp"
-                        android:paddingTop="6dp"
-                        android:paddingBottom="6dp" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/textLogs"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Belum ada log."
-                    android:textSize="12sp"
-                    android:fontFamily="monospace"
-                    android:textColor="#333333" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        <!-- Privacy & Settings -->
+        <Button
+            android:id="@+id/btnPrivacy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Privacy &amp; Transparansi"
+            android:backgroundTint="#FFFFFF"
+            android:textColor="#534AB7" />
 
     </LinearLayout>
 </ScrollView>

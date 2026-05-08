@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Internet untuk POST ke server -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!-- Foreground service untuk keep-alive listener -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
-
-    <!-- Boot receiver supaya service auto-start -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
-    <!-- Wake lock untuk reliable delivery -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-    <!-- Post notifications (Android 13+) untuk status di tray -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
@@ -30,6 +21,7 @@
         android:theme="@style/Theme.TemanQris"
         android:usesCleartextTraffic="true">
 
+        <!-- Entry point: MainActivity (akan redirect ke Onboarding kalau belum complete) -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -40,7 +32,16 @@
             </intent-filter>
         </activity>
 
-        <!-- INTI: NotificationListenerService -->
+        <activity
+            android:name=".onboarding.OnboardingActivity"
+            android:exported="false"
+            android:label="Setup TemanQRIS" />
+
+        <activity
+            android:name=".privacy.PrivacyDashboardActivity"
+            android:exported="false"
+            android:label="Privacy" />
+
         <service
             android:name=".PaymentNotificationListener"
             android:exported="true"
@@ -51,13 +52,11 @@
             </intent-filter>
         </service>
 
-        <!-- Foreground service untuk keep listener alive -->
         <service
             android:name=".ListenerKeepAliveService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
 
-        <!-- Auto-start setelah device reboot -->
         <receiver
             android:name=".BootReceiver"
             android:exported="true">

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+
+    <!-- Background circle -->
+    <path
+        android:fillColor="#DCFCE7"
+        android:pathData="M60,60m-55,0a55,55 0 1,0 110,0a55,55 0 1,0 -110,0" />
+
+    <!-- Big check in circle -->
+    <path
+        android:fillColor="#22C55E"
+        android:pathData="M60,30m-22,0a22,22 0 1,0 44,0a22,22 0 1,0 -44,0" />
+
+    <!-- Checkmark -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M48,60 L56,68 L72,52 L68,48 L56,60 L52,56 Z" />
+
+    <!-- Confetti dots -->
+    <path
+        android:fillColor="#FF6B35"
+        android:pathData="M30,40m-3,0a3,3 0 1,0 6,0a3,3 0 1,0 -6,0" />
+    <path
+        android:fillColor="#534AB7"
+        android:pathData="M90,42m-3,0a3,3 0 1,0 6,0a3,3 0 1,0 -6,0" />
+    <path
+        android:fillColor="#22C55E"
+        android:pathData="M28,82m-3,0a3,3 0 1,0 6,0a3,3 0 1,0 -6,0" />
+    <path
+        android:fillColor="#FBBF24"
+        android:pathData="M92,80m-3,0a3,3 0 1,0 6,0a3,3 0 1,0 -6,0" />
+</vector>
